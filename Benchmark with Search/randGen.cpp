@@ -6,37 +6,41 @@
 #include <cmath>
 
 int main() {
-    int N = 100000; //ten million Total number of unique numbers to generate
-    std::set<double> numbers;
 
-    // Initialize a random number generator
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    int range = 100000000;//hundred million
-    std::uniform_int_distribution<> dis(1, range); // Adjust the range as needed
+    for (int i = 10; i <= 10000000; i*=10)
+    {
+        int N = i; //ten million Total number of unique numbers to generate
+        std::set<double> numbers;
 
-    // Generate unique random numbers
-    while (numbers.size() < N) {
-        numbers.insert(dis(gen));
-    }
+        // Initialize a random number generator
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        int range = 100000000;//hundred million
+        std::uniform_int_distribution<> dis(1, range); // Adjust the range as needed
 
-    // Open the file for writing
-    std::string fname = std::to_string(N) + ".csv";
-    std::ofstream writeFile(fname);
-    if (!writeFile.is_open()) {
-        std::cerr << "Unable to open file for writing." << std::endl;
-        return 1; // Return an error code
-    }
+        // Generate unique random numbers
+        while (numbers.size() < N) {
+            numbers.insert(dis(gen));
+        }
 
-    // Write the numbers to the file in ascending order
-    for (int num : numbers) {
-        writeFile << num << "\n";
-    }
+        // Open the file for writing
+        std::string fname = std::to_string(N) + ".csv";
+        std::ofstream writeFile(fname);
+        if (!writeFile.is_open()) {
+            std::cerr << "Unable to open file for writing." << std::endl;
+            return 1; // Return an error code
+        }
 
-    // Close the file
-    writeFile.close();
+        // Write the numbers to the file in ascending order
+        for (int num : numbers) {
+            writeFile << num << "\n";
+        }
 
-    std::cout << "Numbers written to numbers.txt successfully." << std::endl;
+        // Close the file
+        writeFile.close();
 
+        std::cout << "Numbers written to numbers.txt successfully." << std::endl;
+    }  
     return 0;
+    
 }
