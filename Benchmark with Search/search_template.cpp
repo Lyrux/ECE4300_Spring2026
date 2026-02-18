@@ -3,6 +3,7 @@
 #include <fstream>
 #include <string>
 #include <ctime>
+#include <chrono>
 using namespace std;
 
 /**
@@ -118,12 +119,13 @@ void writeTimes(string filename, const vector<double> times, const vector<int> n
  */
 double average(const vector<double> a){
     double sum = 0;
+    double size = a.size();
 
     for(int i = 0; i < a.size(); i++){
         sum += a[i];
     }
     
-    return sum/a.size();
+    return sum/size;
 }
 
 int main(){
@@ -152,7 +154,7 @@ int main(){
         vecGen(filename, v);
 
         // print filename (this will be good for debugging)
-        // cout << "The filename is " << filename << endl;
+        cout << "The filename is " << filename << endl;
 
         // call times.clear() // this ensures that we reset times everytime we read a new file 
         times.clear();
@@ -161,13 +163,14 @@ int main(){
 
         for (size_t j = 0; j < elem_to_find.size(); ++j) {
             clock_t start = clock();
-            iterativeSearch(v, elem_to_find.at(j));
+            int index_if_found = iterativeSearch(v, elem_to_find.at(j));
             // append the elapsed_time_in_sec to the vector,times (hint: push_back())
             // This code should be within the for loop that iterates
             // through all the elements from elem_to_find
             clock_t end = clock();
-            double elapsed_time_in_sec = (static_cast<double>(end - start) / CLOCKS_PER_SEC);
+            double elapsed_time_in_sec = (static_cast<double>((end - start) / CLOCKS_PER_SEC));
             times.push_back(elapsed_time_in_sec);
+            
         }
         
         // call average on the vector, times, and save it as a double. This code should be 
@@ -175,16 +178,13 @@ int main(){
         // but within the for loop that iterates through the file sizes
         // append the double to avg. (hint: push_back())
         avg.push_back(average(times));
-        // This code should be outside the for loop that iterates through
-        // all the elements from elem_to_find
-        // but within the for loop that iterates through the file sizes
+ 
     }
-
+    
     // outside both for loops call writeTimes with the appropriate parameters
     writeTimes("iterativeSearch_times.csv", avg, file_sizes);
     // the first parameter should be "iterativeSearch_times.csv"
     // read the function brief to complete the rest of the parameters
-    
 
     // call avg.clear() to reset avg, so we can use it for binarySearch
     avg.clear();
@@ -198,11 +198,15 @@ int main(){
         times.clear();
       
         for (size_t j = 0; j < elem_to_find.size(); ++j) {
-            clock_t start = clock();
-            binarySearch(v, 0, v.size(), elem_to_find.at(j));
-            clock_t end = clock();
-            double elapsed_time_in_sec = (static_cast<double>(end - start) / CLOCKS_PER_SEC);
-            times.push_back(elapsed_time_in_sec);
+            //clock_t start = clock();
+            auto start = chrono::high_resolution_clock::now();
+            int index_if_found = binarySearch(v, 0, v.size()-1, elem_to_find.at(j));
+            //clock_t end = clock();
+            auto end = chrono::high_resolution_clock::now();
+            //double elapsed_time_in_sec =  static_cast<double>((end - start) / CLOCKS_PER_SEC);
+            auto elapsed_time_in_ns = chrono::duration_cast<chrono::nanoseconds>(end - start);
+            times.push_back(elapsed_time_in_ns.count());
+            cout << index_if_found << ": " <<  "Elapsed time (ns): "<< elapsed_time_in_ns.count() << endl;
         }
           avg.push_back(average(times));
     }
@@ -211,5 +215,4 @@ int main(){
     // the first parameter should be "binarySearch_times.csv"
     writeTimes("binarySearch_times.csv", avg, file_sizes);
     // read the function brief to complete the rest of the parameters
-
 }

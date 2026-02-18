@@ -24,7 +24,7 @@ int main() {
         }
 
         // Open the file for writing
-        std::string fname = std::to_string(N) + ".csv";
+        std::string fname = std::to_string(N) + "_numbers.csv";
         std::ofstream writeFile(fname);
         if (!writeFile.is_open()) {
             std::cerr << "Unable to open file for writing." << std::endl;
