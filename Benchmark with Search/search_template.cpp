@@ -162,14 +162,24 @@ int main(){
         // the code here should be nearly identical to the code from the previous lab
 
         for (size_t j = 0; j < elem_to_find.size(); ++j) {
-            clock_t start = clock();
-            int index_if_found = iterativeSearch(v, elem_to_find.at(j));
+
             // append the elapsed_time_in_sec to the vector,times (hint: push_back())
             // This code should be within the for loop that iterates
             // through all the elements from elem_to_find
-            clock_t end = clock();
-            double elapsed_time_in_sec = (static_cast<double>((end - start) / CLOCKS_PER_SEC));
+
+
+            auto start = chrono::high_resolution_clock::now();
+
+            int index_if_found = iterativeSearch(v, elem_to_find[j]);
+            
+            auto end = chrono::high_resolution_clock::now();
+
+            double elapsed_time_in_sec = chrono::duration(end-start).count();
+
+            //double elapsed_time_in_sec = (static_cast<double>((end - start) / CLOCKS_PER_SEC));
             times.push_back(elapsed_time_in_sec);
+
+            cout << index_if_found << ": " <<  "Elapsed time (s): "<< elapsed_time_in_sec << endl;
             
         }
         
@@ -198,15 +208,16 @@ int main(){
         times.clear();
       
         for (size_t j = 0; j < elem_to_find.size(); ++j) {
-            //clock_t start = clock();
+
             auto start = chrono::high_resolution_clock::now();
             int index_if_found = binarySearch(v, 0, v.size()-1, elem_to_find.at(j));
-            //clock_t end = clock();
+   
             auto end = chrono::high_resolution_clock::now();
-            //double elapsed_time_in_sec =  static_cast<double>((end - start) / CLOCKS_PER_SEC);
-            auto elapsed_time_in_ns = chrono::duration_cast<chrono::nanoseconds>(end - start);
-            times.push_back(elapsed_time_in_ns.count());
-            cout << index_if_found << ": " <<  "Elapsed time (ns): "<< elapsed_time_in_ns.count() << endl;
+           
+            double elapsed_time_in_sec = chrono::duration(end-start).count();
+            
+            times.push_back(elapsed_time_in_sec);
+            //cout << index_if_found << ": " <<  "Elapsed time (ns): "<< elapsed_time_in_ns.count() << endl;
         }
           avg.push_back(average(times));
     }
