@@ -65,7 +65,6 @@ int binarySearch(vector<int> & v, int start, int end, int elem){
     else
         return midpt;
     
-
     // return a recursive call to binarySearch(...)
     return binarySearch(v, start, end, elem);
 }
@@ -166,29 +165,18 @@ int main(){
             // append the elapsed_time_in_sec to the vector,times (hint: push_back())
             // This code should be within the for loop that iterates
             // through all the elements from elem_to_find
-
-
             auto start = chrono::high_resolution_clock::now();
-
-            int index_if_found = iterativeSearch(v, elem_to_find[j]);
-            
+            iterativeSearch(v, elem_to_find[j]);
             auto end = chrono::high_resolution_clock::now();
 
-            double elapsed_time_in_sec = chrono::duration(end-start).count();
-
-            //double elapsed_time_in_sec = (static_cast<double>((end - start) / CLOCKS_PER_SEC));
-            times.push_back(elapsed_time_in_sec);
-
-            cout << index_if_found << ": " <<  "Elapsed time (s): "<< elapsed_time_in_sec << endl;
-            
+            auto duration = chrono::duration<double, std::micro>(end - start).count();
+            times.push_back(duration);
         }
-        
         // call average on the vector, times, and save it as a double. This code should be 
         // outside the for loop that iterates through all the elements from elem_to_find
         // but within the for loop that iterates through the file sizes
         // append the double to avg. (hint: push_back())
         avg.push_back(average(times));
- 
     }
     
     // outside both for loops call writeTimes with the appropriate parameters
@@ -210,14 +198,11 @@ int main(){
         for (size_t j = 0; j < elem_to_find.size(); ++j) {
 
             auto start = chrono::high_resolution_clock::now();
-            int index_if_found = binarySearch(v, 0, v.size()-1, elem_to_find.at(j));
-   
+            binarySearch(v, 0, v.size() - 1, elem_to_find.at(j));
             auto end = chrono::high_resolution_clock::now();
-           
-            double elapsed_time_in_sec = chrono::duration(end-start).count();
-            
-            times.push_back(elapsed_time_in_sec);
-            //cout << index_if_found << ": " <<  "Elapsed time (ns): "<< elapsed_time_in_ns.count() << endl;
+
+            auto duration = chrono::duration<double, std::micro>(end - start).count();
+            times.push_back(duration);
         }
           avg.push_back(average(times));
     }
