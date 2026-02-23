@@ -101,7 +101,7 @@ void vecGen(string filename, vector<int> & v){
 void writeTimes(string filename, const vector<double> times, const vector<int> n){
     ofstream myFile(filename);
 
-    myFile << "Number of Elements (n)\t Time (sec) " << endl;
+    myFile << "Number of Elements (n)\t Time (ns) " << endl;
     for(int i = 0; i < times.size(); i++){
 
         myFile << n[i] << "\t" << times[i] << "\n";
@@ -169,7 +169,7 @@ int main(){
             iterativeSearch(v, elem_to_find[j]);
             auto end = chrono::high_resolution_clock::now();
 
-            auto duration = chrono::duration<double, std::micro>(end - start).count();
+            auto duration = chrono::duration<double, std::nano>(end - start).count();
             times.push_back(duration);
         }
         // call average on the vector, times, and save it as a double. This code should be 
@@ -201,7 +201,7 @@ int main(){
             binarySearch(v, 0, v.size() - 1, elem_to_find.at(j));
             auto end = chrono::high_resolution_clock::now();
 
-            auto duration = chrono::duration<double, std::micro>(end - start).count();
+            auto duration = chrono::duration<double, std::nano>(end - start).count();
             times.push_back(duration);
         }
           avg.push_back(average(times));
